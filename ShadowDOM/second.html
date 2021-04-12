@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<main id="app"></main>
+<script>
+  const app = document.querySelector('#app');
+
+  const shadow = document.createElement('div');
+  shadow.id = `__shadow-root-${new Date().getTime()}`;
+
+  shadow.attachShadow({ mode: 'open' });
+
+  const p = document.createElement('p');
+  p.textContent = '内容';
+
+  console.log(shadow);
+  shadow.shadowRoot.appendChild(p);
+  app.appendChild(shadow);
+</script>
+</body>
+</html>

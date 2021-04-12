@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+<main>
+  <div>
+    <button onclick="start()">开始</button>
+    <button onclick="stop()">结束</button>
+  </div>
+  <h1>等待资源返回</h1>
+  <ul></ul>
+</main>
+<script>
+  let worker = null;
+  let ul = document.querySelector('ul');
+  let h1 = document.querySelector('h1');
+
+  function appendLi(text) {
+    const li = document.createElement('li');
+    li.innerText = text;
+    ul.appendChild(li);
+  }
+
+  if (!window.Worker) {
+    alert('你的浏览器不支持 Web Worker');
+  }
+
+  function init() {
+    worker = new Worker('./worker.js');
+
+    worker.addEventListener('message', function (event) {
+      const { data } = event;
+      console.log('worker返回的结果', data);
+      h1.innerText = '正在打印中……';
+      appendLi(event.data);
+    });
+
+    worker.addEventListener('error', function (error) {
+      console.error(error.message);
+    });
+  }
+
+  function start() {
+    init();
+    worker.postMessage(100);
+    while (ul.firstChild) {
+      ul.removeChild(ul.firstChild);
+    }
+    h1.innerText = '正在打印中……';
+  }
+
+  function stop() {
+    worker.terminate();
+    h1.innerText = '已结束';
+  }
+</script>
+</body>
+</html>

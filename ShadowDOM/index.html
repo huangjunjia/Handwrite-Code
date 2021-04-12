@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    section {
+      height: 300px;
+      border: 1px solid;
+      overflow: auto;
+    }
+  </style>
+</head>
+<body>
+<main id="app">
+  <h1>mode: open</h1>
+  <button onclick="changeTextContent('openEl')">修改</button>
+  <section id="open">
+    <children-count type="open"></children-count>
+    <p>1234567890</p>
+    <p>ahsjkghak</p>
+    <p>askjg</p>
+    <p>ahgkasljdf</p>
+    <p>ahkgjhskf</p>
+  </section>
+  <h1>mode: close</h1>
+  <button onclick="changeTextContent('closeEl')">修改</button>
+  <section id="close">
+    <children-count type="closed"></children-count>
+    <p>asdfghjkl</p>
+    <p>ahsjkdh</p>
+    <p>ahdkjga</p>
+  </section>
+</main>
+<script>
+  const openEl = document.querySelector('#open');
+  const closeEl = document.querySelector('#close');
+
+  class ChildrenCount extends HTMLElement {
+    constructor() {
+      super();
+      const span = document.createElement('span');
+      console.log(this.getAttribute('type'));
+      this.shadow = this.attachShadow({ mode: this.getAttribute('type') });
+
+      const _this = this;
+      this.wcParent = this.parentNode;
+      this.elObserver = new MutationObserver(function(mutationList) {
+        mutationList.forEach(function(mutation) {
+          const target = mutation.target;
+          if (!target) {
+            return;
+          }
+
+          if (mutation.type === 'childList') {
+            span.textContent = ChildrenCount.count(_this.wcParent.childNodes);
+          }
+        });
+      });
+
+      this.addWcParentChange();
+
+      span.textContent = ChildrenCount.count(this.wcParent.childNodes);
+
+      this.shadow.appendChild(span);
+
+      console.log(document);
+    }
+
+    static count(nodes) {
+      const pList = [];
+      for (let i = 0; i < nodes.length; i++) {
+        if (nodes[i].tagName && nodes[i].tagName.toUpperCase() === 'P') {
+          pList.push(nodes[i]);
+        }
+      }
+      return pList.length;
+    }
+
+    addWcParentChange() {
+      this.elObserver.observe(this.wcParent, {
+        childList: true,
+        attributes: true,
+        characterData: true
+      });
+    }
+  }
+
+  customElements.define('children-count', ChildrenCount);
+
+  console.log('当mode=open时: ', document.querySelector('children-count[type="open"]').shadowRoot);
+  console.log('当mode=closed时: ', document.querySelector('children-count[type="closed"]').shadowRoot);
+
+  function changeTextContent(id) {
+    const p = document.createElement('p');
+
+    switch (id) {
+      case 'openEl':
+        p.textContent = '\nopen-el: ' + new Date().getTime();
+        openEl.appendChild(p);
+        break;
+      case 'closeEl':
+        p.textContent = '\nclose-el: ' + new Date().getTime();
+        closeEl.appendChild(p);
+        break;
+      default:
+        break;
+    }
+  }
+</script>
+</body>
+</html>
