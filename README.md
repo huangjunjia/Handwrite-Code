@@ -4,6 +4,6 @@
 
 ## JavaScript 相关
 
-1. [防抖和节流](https://github.com/HuangJunjia/Handwrite-Code/tree/master/Debounce%20%26%20Throttle)
-2. [函数柯里化](https://github.com/HuangJunjia/Handwrite-Code/tree/master/Curry)
-3. [Apply&Call&Bind](https://github.com/HuangJunjia/Handwrite-Code/tree/master/Apply%20%26%20Call%20%26%20Bind)
+1. [防抖和节流](https://github.com/HuangJunjia/Handwrite-Code/tree/master/Debounce%20%26%20Throttle/index.html)
+2. [函数柯里化](https://github.com/HuangJunjia/Handwrite-Code/tree/master/Curry/index.html)
+3. [Apply&Call&Bind](https://github.com/HuangJunjia/Handwrite-Code/tree/master/Apply%20%26%20Call%20%26%20Bind/index.html)
