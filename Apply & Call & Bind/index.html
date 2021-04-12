@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<h1>请打开控制台查看</h1>
+<script>
+  /**
+   * apply
+   * */
+  Function.prototype.myApply = function(context, args) {
+    context = context || window;
+
+    const key = Symbol();
+    context[key] = this;
+
+    const result = context[key](...args);
+    delete context[key];
+
+    return result;
+  };
+
+  /**
+   * call
+   * */
+  Function.prototype.myCall = function(context, ...args) {
+    context = context || window;
+
+    const key = Symbol();
+    context[key] = this;
+
+    const result = context[key](...args);
+    delete context[key];
+
+    return result;
+  };
+
+  /**
+   * bind
+   * */
+  Function.prototype.myBind = function(context) {
+    context = context || window;
+
+    const _this = this;
+    return function(...args) {
+      return _this.apply(context, args);
+    };
+  };
+
+  function add(a, b, c) {
+    return `${this.name} say: "My age is ${a + b + c}"`;
+  }
+
+  const context = {
+    name: '张三'
+  };
+
+  const myAdd = add.myBind(context);
+
+  console.log(add.myApply(context, [1, 2, 3]));
+  console.log(add.myCall(context, 1, 2, 3));
+  console.log(myAdd(1, 2, 3));
+</script>
+</body>
+</html>

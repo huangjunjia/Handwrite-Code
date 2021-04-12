@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<h1>请打开浏览器控制台查看</h1>
+<script>
+  const log = (s) => console.log('%c结果:', 'color: green', s);
+
+  function curry(fn) {
+    return function curryFn(...args) {
+      if (args.length < fn.length) {
+        return function() {
+          return curryFn.apply(this, args.concat(Array.from(arguments)));
+        };
+      } else {
+        return fn(...args);
+      }
+    };
+  }
+
+  function add(a, b, c, d) {
+    return a + b + c + d;
+  }
+
+  const addTest = curry(add);
+
+  log(addTest(1, 2, 3, 4));
+  log(addTest(1)(2, 3, 4));
+  log(addTest(1)(2)(3, 4));
+  log(addTest(1)(2)(3)(4));
+  log(addTest(1, 2, 3)(4));
+</script>
+</body>
+</html>

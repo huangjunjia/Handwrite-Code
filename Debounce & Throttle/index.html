@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<main>
+  <article>
+    <button onclick="debounceTest()">防抖</button>
+    <ul id="debounce-container"></ul>
+  </article>
+  <article>
+    <button onclick="throttleTest()">节流</button>
+    <ul id="throttle-container"></ul>
+  </article>
+</main>
+<script>
+  const debounceContainerEl = document.querySelector('#debounce-container');
+  const throttleContainerEl = document.querySelector('#throttle-container');
+
+  /* 防抖 ------ start */
+  /**
+   * 实现原理
+   *   每次触发防抖函数都会清楚 timer
+   *   将 timer 保存在闭包中防止被清除
+   *   可以通过 new Debounce(fn, delay) 重复使用一个防抖函数
+   * */
+  function Debounce(fn, delay) {
+    let timer = null;
+
+    return function(...args) {
+      const _this = this;
+
+      if (timer) {
+        clearTimeout(timer);
+      }
+
+      timer = setTimeout(function() {
+        fn.apply(_this, args);
+      }, delay);
+    };
+  }
+
+  function debounceFn(timestamp) {
+    const li = document.createElement('li');
+    li.textContent = `Debounce === ${timestamp}`;
+    debounceContainerEl.appendChild(li);
+  }
+
+  const df = new Debounce(debounceFn, 1000);
+
+  function debounceTest() {
+    console.log('防抖方法触发');
+    df(new Date().toString());
+  }
+
+  /* 节流 ------ start */
+  /**
+   * 实现原理
+   *   与防抖的区别在于每次执行节流函数时都会去判断
+   *   是否已经有执行的定时器，如果有则不执行
+   *   反之执行
+   * */
+  function Throttle(fn, delay) {
+    let tag = false;
+
+    return function(...args) {
+      const _this = this;
+
+      if (tag) {
+        return;
+      }
+
+      tag = true;
+      setTimeout(function() {
+        tag = false;
+        fn.apply(_this, args);
+      }, delay);
+    };
+  }
+
+  function throttleFn(timestamp) {
+    const li = document.createElement('li');
+    li.textContent = `Throttle === ${timestamp}`;
+    throttleContainerEl.appendChild(li);
+  }
+
+  const tf = new Throttle(throttleFn, 1000);
+
+  function throttleTest() {
+    console.log('节流方法触发');
+    tf(new Date().toString());
+  }
+</script>
+</body>
+</html>

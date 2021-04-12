@@ -1,0 +1,7 @@
+#dirs
+.idea
+.vscode
+.history
+node_modules
+dist
+test
