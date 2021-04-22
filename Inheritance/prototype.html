@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<script>
+  /**
+   * 继承方式1
+   * 原型继承
+   * */
+  function Teacher() {
+    this.math = function(a, b) {
+      return a + b;
+    };
+    this.name = '老师';
+  }
+
+  function Student(name) {
+    this.name = name;
+  }
+
+  Student.prototype = new Teacher();
+  Object.defineProperty(Student.prototype, 'constructor', {
+    value: Student,
+    writable: true,
+    enumerable: false
+  });
+
+  const lilei = new Student('李雷');
+  console.log(lilei.name);
+  console.log(lilei.math(1, 2));
+  console.log(lilei instanceof Student);
+  console.log(lilei instanceof Teacher);
+  console.log(lilei instanceof Object);
+</script>
+</body>
+</html>

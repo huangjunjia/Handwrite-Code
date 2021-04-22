@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<h1>请打开控制台查看</h1>
+<script>
+  const arr = [123, 315, 123, 1, 51, 5234, 123, 42, 42352, 35, 1, 23, 51, 232, 45, 234, 111];
+  for (let i = 0; i < arr.length - 1; i++) {
+    for (let j = 0; j < arr.length - 1 - i; j++) {
+      if (arr[j] > arr[j + 1]) {
+        const temp = arr[j + 1];
+        arr[j + 1] = arr[j];
+        arr[j] = temp;
+      }
+    }
+  }
+  console.log(arr);
+</script>
+</body>
+</html>

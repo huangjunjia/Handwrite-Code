@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    li > header {
+      margin: 20px 0;
+    }
+
+    section {
+      border: 1px solid black;
+    }
+
+    .container0 {
+      height: 60px;
+    }
+
+    .child0 {
+      margin: 0 auto;
+      width: 100px;
+      height: 40px;
+      background: red;
+    }
+
+    .container1 {
+      height: 60px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .child1, .child2 {
+      height: 40px;
+      width: 100px;
+      background: red;
+    }
+
+    .container2 {
+      height: 60px;
+      display: grid;
+      justify-content: center;
+    }
+
+    .container3 {
+      height: 60px;
+      position: relative;
+    }
+
+    .child3 {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      background: red;
+      width: 100px;
+      height: 40px;
+    }
+
+    .container4 {
+      width: 100%;
+      height: 60px;
+    }
+
+    .child4 {
+      display: table;
+      background: red;
+      width: 100px;
+      height: 40px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+<h1>水平居中</h1>
+<ol>
+  <li>
+    <header>使用 margin</header>
+    <section class="container0">
+      <div class="child0"></div>
+    </section>
+  </li>
+  <li>
+    <header>使用 flex</header>
+    <section class="container1">
+      <div class="child1"></div>
+    </section>
+  </li>
+  <li>
+    <header>使用 grid</header>
+    <section class="container2">
+      <div class="child2"></div>
+    </section>
+  </li>
+  <li>
+    <header>使用绝对定位</header>
+    <section class="container3">
+      <div class="child3"></div>
+    </section>
+  </li>
+  <li>
+    <header>使用table</header>
+    <section class="container4">
+      <div class="child4"></div>
+    </section>
+  </li>
+</ol>
+</body>
+</html>

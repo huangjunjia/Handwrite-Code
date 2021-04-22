@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<script>
+  /**
+   * 判断 a 的类型是否为 b
+   * @param {Object} a
+   * @param {Object} b
+   * @return {boolean}
+   */
+  function myInstanceOf(a, b) {
+    let right = b.prototype;
+    let left = a.__proto__;
+
+    while (true) {
+      if (left === null) {
+        return false;
+      } else if (left === right) {
+        return true;
+      }
+      left = left.__proto__;
+    }
+  }
+
+  function Teacher() {
+    this.math = function(a, b) {
+      return a + b;
+    }
+  }
+
+  function Student() {}
+  Student.prototype = new Teacher();
+
+  Object.defineProperty(Student.prototype, 'constructor', {
+    value: Student,
+    writable: true,
+    enumerable: false
+  })
+
+  const p = new Student();
+  console.log(p.math(1, 2));
+  console.log(myInstanceOf(p, Student));
+  console.log(myInstanceOf(p, Teacher));
+  console.log(myInstanceOf(p, Object));
+</script>
+</body>
+</html>

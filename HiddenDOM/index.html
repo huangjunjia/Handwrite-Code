@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    .container {
+      border: 1px solid black;
+      width: 100%;
+      position: relative;
+    }
+
+    header {
+      padding: 20px 0;
+    }
+
+    .hidden-container-1 {
+      display: none;
+    }
+
+    .hidden-container-2 {
+      visibility: hidden;
+    }
+
+    .hidden-container-3 {
+      opacity: 0;
+    }
+
+    .hidden-container-4 {
+      height: 0;
+      overflow: hidden;
+    }
+
+    .hidden-container-5 {
+      position: absolute;
+      height: 100px;
+      z-index: -9999;
+    }
+
+    .hidden-container-5 > .img {
+      position: absolute;
+      height: 100px;
+      z-index: -9999;
+    }
+
+    .hidden-container-6 {
+      transform: scale(0);
+    }
+  </style>
+</head>
+<body>
+<ol>
+  <li>
+    <header>display</header>
+    <div class="container">
+      <div class="hidden-container-1">
+        <img src="./images/rabbit.jpeg" alt="">
+      </div>
+    </div>
+  </li>
+  <li>
+    <header>visible</header>
+    <div class="container">
+      <div class="hidden-container-2">
+        <img src="./images/rabbit.jpeg" alt="">
+      </div>
+    </div>
+  </li>
+  <li>
+    <header>opacity</header>
+    <div class="container">
+      <div class="hidden-container-3">
+        <img src="./images/rabbit.jpeg" alt="">
+      </div>
+    </div>
+  </li>
+  <li>
+    <header>overflow</header>
+    <div class="container">
+      <div class="hidden-container-4">
+        <img src="./images/rabbit.jpeg" alt="">
+      </div>
+    </div>
+  </li>
+  <li>
+    <header>z-index</header>
+    <div class="container" style="min-height: 300px; background: #fff">
+      min-height: 300px
+      <div class="hidden-container-5">
+        <img src="./images/rabbit.jpeg" alt="">
+      </div>
+    </div>
+  </li>
+  <li>
+    <header>transform</header>
+    <div class="container">
+      <div class="hidden-container-6">
+        <img src="./images/rabbit.jpeg" alt="">
+      </div>
+    </div>
+  </li>
+</ol>
+</body>
+</html>

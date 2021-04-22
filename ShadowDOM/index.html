@@ -9,6 +9,10 @@
       border: 1px solid;
       overflow: auto;
     }
+
+    .shadow-span {
+      color: red;
+    }
   </style>
 </head>
 <body>
@@ -40,8 +44,13 @@
     constructor() {
       super();
       const span = document.createElement('span');
-      console.log(this.getAttribute('type'));
+      span.className = 'shadow-span';
+
+      const style = document.createElement('style');
+      style.innerHTML = '.shadow-span{\ncolor:red;\n}'
+
       this.shadow = this.attachShadow({ mode: this.getAttribute('type') });
+      this.shadow.appendChild(style);
 
       const _this = this;
       this.wcParent = this.parentNode;
@@ -63,8 +72,6 @@
       span.textContent = ChildrenCount.count(this.wcParent.childNodes);
 
       this.shadow.appendChild(span);
-
-      console.log(document);
     }
 
     static count(nodes) {
