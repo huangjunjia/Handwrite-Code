@@ -10,8 +10,10 @@
   <ul></ul>
 </main>
 <script>
+  // 根元素
   const container = document.querySelector('ul');
 
+  // 旧节点列表
   let oldVnodeList = [
     { key: 0 },
     { key: 1 },
@@ -24,6 +26,9 @@
     { key: 8 },
     { key: 9 }
   ];
+
+  // 新节点列表
+  // 通过注释模拟节点增加和删除
   let newVnodeList = [
     { key: 0 },
     { key: 1 },
@@ -38,6 +43,7 @@
     // { key: 10 }
   ];
 
+  // 简单洗牌算法
   function shuffle(a) {
     for (let i = a.length; i; i--) {
       let j = Math.floor(Math.random() * i);
@@ -46,6 +52,7 @@
     return a;
   }
 
+  // 渲染
   function render(nodeList) {
     for (let i = 0; i < nodeList.length; i++) {
       const li = document.createElement('li');
@@ -60,6 +67,7 @@
     render(oldVnodeList);
   };
 
+  // 对比新旧节点
   function patch(oldVnode, newVnode) {
     newVnode.el = oldVnode.el;
   }
@@ -67,6 +75,7 @@
   /**
    * 使用单调递增的形式实现diff
    * */
+  // 更新render
   function updateRender() {
     // 洗牌，模拟同层级节点前后顺序调整
     newVnodeList = shuffle(JSON.parse(JSON.stringify(newVnodeList)));
