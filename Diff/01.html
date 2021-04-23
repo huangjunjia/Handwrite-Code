@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<main>
+  <button onclick="updateRender()">更新dom</button>
+  <ul></ul>
+</main>
+<script>
+  const container = document.querySelector('ul');
+
+  let oldVnodeList = [
+    { key: 0 },
+    { key: 1 },
+    { key: 2 },
+    { key: 3 },
+    { key: 4 },
+    { key: 5 },
+    { key: 6 },
+    { key: 7 },
+    { key: 8 },
+    { key: 9 }
+  ];
+  let newVnodeList = [
+    { key: 0 },
+    { key: 1 },
+    { key: 2 },
+    { key: 3 },
+    { key: 4 },
+    { key: 5 },
+    { key: 6 },
+    { key: 7 },
+    { key: 8 },
+    { key: 9 },
+    // { key: 10 }
+  ];
+
+  function shuffle(a) {
+    for (let i = a.length; i; i--) {
+      let j = Math.floor(Math.random() * i);
+      [a[i - 1], a[j]] = [a[j], a[i - 1]];
+    }
+    return a;
+  }
+
+  function render(nodeList) {
+    for (let i = 0; i < nodeList.length; i++) {
+      const li = document.createElement('li');
+      li.id = `li${nodeList[i].key}`;
+      li.textContent = `li - ${nodeList[i].key}`;
+      nodeList[i].el = li;
+      container.appendChild(li);
+    }
+  }
+
+  window.onload = function() {
+    render(oldVnodeList);
+  };
+
+  function patch(oldVnode, newVnode) {
+    newVnode.el = oldVnode.el;
+  }
+
+  /**
+   * 使用单调递增的形式实现diff
+   * */
+  function updateRender() {
+    // 洗牌，模拟同层级节点前后顺序调整
+    newVnodeList = shuffle(JSON.parse(JSON.stringify(newVnodeList)));
+
+    // 保存单调递增的最大值
+    let max = 0;
+
+    // 遍历新节点列表
+    for (let i = 0; i < newVnodeList.length; i++) {
+      // 保存是否为旧节点的标志
+      let isOldVnode = false;
+
+      // 遍历旧节点列表
+      for (let j = 0; j < oldVnodeList.length; j++) {
+        // 判断旧节点是否和当前的新节点是同一个节点，通过key
+        if (oldVnodeList[j].key === newVnodeList[i].key) {
+          // 修改旧节点标志为true
+          isOldVnode = true;
+          // patch新旧节点
+          patch(oldVnodeList[j], newVnodeList[i]);
+
+          // 如果新节点在旧节点中的索引小于单调最大值
+          if (j < max) {
+            // 获取上一个新节点的下一个兄弟节点
+            const refNode = newVnodeList[i - 1].el.nextSibling;
+            // 使用insertBefore移动旧节点，实现节点复用
+            container.insertBefore(oldVnodeList[j].el, refNode);
+            // 跳出当前循环
+            break;
+          }
+          // 如果新节点在旧节点中的索引比单调最大值大于或等于
+          else {
+            // 更新单调最大值
+            max = j;
+          }
+        }
+      }
+
+      // 判断该节点是否在旧节点列表中不存在
+      if (!isOldVnode) {
+        // 获取插入的位置
+        const refNode =
+          // 如果为第一个节点的时候插入到旧节点的第一个节点的前面
+          // 否则插入到前一个新节点的紧跟其后的兄弟节点之前
+          i - 1 < 0
+            ? oldVnodeList[0].el
+            : newVnodeList[i - 1].el.nextSibling;
+
+        // 创建新节点
+        const li = document.createElement('li');
+        li.id = `li${newVnodeList[i].key}`;
+        li.textContent = `li - ${newVnodeList[i].key}`;
+        newVnodeList[i].el = li;
+
+        // 插入节点
+        container.insertBefore(li, refNode);
+      }
+    }
+
+    // 遍历旧节点并判断是否在新节点列表中不存在
+    for (let i = 0; i < oldVnodeList.length; i++) {
+      // 在新节点列表中寻找旧节点
+      const hash = newVnodeList.find(v => v.key === oldVnodeList[i].key);
+      // 如果旧节点不存在于新节点列表中
+      if (!hash) {
+        // 移除旧节点
+        container.removeChild(oldVnodeList[i].el);
+      }
+    }
+
+    // 更新旧节点列表
+    oldVnodeList = newVnodeList;
+  }
+</script>
+</body>
+</html>
