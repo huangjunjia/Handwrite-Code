@@ -14,7 +14,7 @@
   const container = document.querySelector('ul');
 
   // 旧节点列表
-  let oldVnodeList = [
+  let oldVNodeList = [
     { key: 0 },
     { key: 1 },
     { key: 2 },
@@ -29,18 +29,18 @@
 
   // 新节点列表
   // 通过注释模拟节点增加和删除
-  let newVnodeList = [
+  let newVNodeList = [
     { key: 0 },
-    { key: 1 },
-    { key: 2 },
-    { key: 3 },
-    { key: 4 },
-    { key: 5 },
+    // { key: 1 },
+    // { key: 2 },
+    // { key: 3 },
+    // { key: 4 },
+    // { key: 5 },
     { key: 6 },
     { key: 7 },
     { key: 8 },
     { key: 9 },
-    // { key: 10 }
+    { key: 10 }
   ];
 
   // 简单洗牌算法
@@ -64,20 +64,148 @@
   }
 
   window.onload = function() {
-    render(oldVnodeList);
+    render(oldVNodeList);
   };
 
   // 对比新旧节点
-  function patch(oldVnode, newVnode) {
-    newVnode.el = oldVnode.el;
+  function patch(oldVNode, newVNode) {
+    newVNode.el = oldVNode.el;
   }
 
   /**
-   * 使用单调递增的形式实现diff
+   * 使用双端比较实现diff
    * */
   // 更新render
   function updateRender() {
+    // 洗牌，模拟同层级节点前后顺序调整
+    newVNodeList = shuffle(JSON.parse(JSON.stringify(newVNodeList)));
+    console.log(newVNodeList);
 
+    // 获取新旧节点列表的首尾指针
+    let oldStartIndex = 0;
+    let oldEndIndex = oldVNodeList.length - 1;
+    let newStartIndex = 0;
+    let newEndIndex = newVNodeList.length - 1;
+
+    // 获取新旧节点列表首尾节点
+    let oldStartVNode = oldVNodeList[oldStartIndex];
+    let oldEndVNode = oldVNodeList[oldEndIndex];
+    let newStartVNode = newVNodeList[newStartIndex];
+    let newEndVNode = newVNodeList[newEndIndex];
+
+    // 当新旧列表头指针均小于等于尾指针时进行对比
+    // 当头指针均大于尾指针时对比结束
+    while (oldStartIndex <= oldEndIndex && newStartIndex <= newEndIndex) {
+      /**
+       * 对比四个节点是否有存在相等
+       * 最多对比四次，只要找到有相同节点就可以复用
+       * 如果找到了相同节点，相应的指针就需要前移/后移一位
+       * */
+      // 当旧头部节点不存在时移动旧头部指针
+      if (!oldStartVNode) {
+        oldStartIndex++;
+        oldStartVNode = oldVNodeList[oldStartIndex];
+      }
+      // 当旧尾部节点不存在时移动旧尾部指针
+      else if (!oldEndVNode) {
+        oldEndIndex--;
+        oldEndVNode = oldVNodeList[oldEndIndex];
+      }
+      // 步骤一：oldStartVNode 和 newStartVNode 比对
+      else if (oldStartVNode.key === newStartVNode.key) {
+        patch(oldStartVNode, newStartVNode);
+        oldStartIndex++;
+        newStartIndex++;
+        oldStartVNode = oldVNodeList[oldStartIndex];
+        newStartVNode = newVNodeList[newStartIndex];
+      }
+      // 步骤二：oldEndVNode 和 newEndVNode 比对
+      else if (oldEndVNode.key === newEndVNode.key) {
+        patch(oldEndVNode, newEndVNode);
+        oldEndIndex--;
+        newEndIndex--;
+        oldEndVNode = oldVNodeList[oldEndIndex];
+        newEndVNode = newVNodeList[newEndIndex];
+      }
+      // 步骤三：oldStartVNode 和 newEndVNode 比对
+      else if (oldStartVNode.key === newEndVNode.key) {
+        // patch新旧节点
+        patch(oldStartVNode, newEndVNode);
+        // 将旧节点列表的尾指针指向的节点移动至旧节点列表头指针的节点的前面
+        container.insertBefore(oldStartVNode.el, oldEndVNode.el.nextSibling);
+        // 更新指针和节点
+        oldStartIndex++;
+        newEndIndex--;
+        oldStartVNode = oldVNodeList[oldStartIndex];
+        newEndVNode = newVNodeList[newEndIndex];
+      }
+      // 步骤四：oldEndVNode 和 newStartVNode 比对
+      else if (oldEndVNode.key === newStartVNode.key) {
+        // patch新旧节点
+        patch(oldEndVNode, newStartVNode);
+        // 将旧节点列表的尾指针指向的节点移动至旧节点列表头指针的节点的前面
+        container.insertBefore(oldEndVNode.el, oldStartVNode.el);
+        // 更新指针和节点
+        oldEndIndex--;
+        newStartIndex++;
+        oldEndVNode = oldVNodeList[oldEndIndex];
+        newStartVNode = newVNodeList[newStartIndex];
+      }
+      // 例外情况，四个节点都不相同
+      else {
+        // 在旧节点列表中判断是否存在于新节点列表头部节点相同的节点
+        const index = oldVNodeList.findIndex(vnode => vnode && vnode.key === newStartVNode.key);
+        // 如果存在
+        if (index > -1) {
+          // 获取旧节点列表中存在的节点
+          const oldVNode = oldVNodeList[index];
+          // patch新旧节点，用新节点列表头部的节点于找到的旧节点比较
+          patch(oldVNode, newStartVNode);
+          // 将找到的节点移动到旧的头部节点之前
+          container.insertBefore(oldVNode.el, oldStartVNode.el);
+          // 清除已对比节点
+          oldVNodeList[index] = null;
+        } else {
+          // 创建新节点
+          const li = document.createElement('li');
+          li.id = `li${newStartVNode.key}`;
+          li.textContent = `li - ${newStartVNode.key}`;
+          newStartVNode.el = li;
+
+          // 插入节点
+          container.insertBefore(li, oldStartVNode.el);
+        }
+        // 移动新节点头指针
+        newStartIndex++;
+        newStartVNode = newVNodeList[newStartIndex];
+      }
+    }
+
+    // 通过头尾指针判断是否存在未移除和未添加的元素
+    // 如果循环结束时，旧节点尾部指针小于旧节点头部指针，则认为存在新增节点
+    if (oldEndIndex < oldStartIndex) {
+      for (let i = newStartIndex; i <= newEndIndex; i++) {
+        // 创建新节点
+        const li = document.createElement('li');
+        li.id = `li${newVNodeList[i].key}`;
+        li.textContent = `li - ${newVNodeList[i].key}`;
+        newVNodeList[i].el = li;
+
+        // 插入节点
+        container.insertBefore(li, oldStartVNode.el);
+      }
+    }
+    // 如果循环结束时，新节点尾部指针小于新节点头部指针，认为存在移除节点
+    else if (newEndIndex < newStartIndex) {
+      for (let i = oldStartIndex; i <= oldEndIndex; i++) {
+        if (oldVNodeList[i]) {
+          container.removeChild(oldVNodeList[i].el);
+        }
+      }
+    }
+
+    // 更新旧节点列表
+    oldVNodeList = newVNodeList;
   }
 </script>
 </body>
