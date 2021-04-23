@@ -18,7 +18,7 @@
     const obj = {};
     // 2. 将目标函数的原型链接到新对象之上作为新对象的 constructor
     Object.setPrototypeOf(obj, Constructor.prototype);
-    // 3. 将新对象作为目标函数的上下文
+    // 3. 将新对象作为目标函数的上下文，同时返回结果
     const result = Constructor.apply(obj, args);
     // 4. 判断目标函数的返回值类型是否是引用类型，是的话返回返回值，不是的话返回本身
     return result instanceof Object ? result : obj;
@@ -29,9 +29,14 @@
     this.age = 24;
   }
 
+  Teacher.prototype.say = function() {
+    return `My name is ${this.name}, I'm ${this.age} years old.`;
+  };
+
   const t = newObject(Teacher);
 
   console.log(t);
+  console.log(t.say());
   console.log(t instanceof Teacher);
 </script>
 </body>
