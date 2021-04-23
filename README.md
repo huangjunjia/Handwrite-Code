@@ -8,7 +8,7 @@
 2. [函数柯里化](https://github.com/HuangJunjia/Handwrite-Code/blob/master/Curry/index.html)
 3. [Apply&Call&Bind](https://github.com/HuangJunjia/Handwrite-Code/blob/master/Apply%20%26%20Call%20%26%20Bind/index.html)
 4. 继承
-    - [原型链继承](https://github.com/HuangJunjia/Handwrite-Code/blob/master/Inheritance/prototye.html)
+    - [原型链继承](https://github.com/HuangJunjia/Handwrite-Code/blob/master/Inheritance/prototype.html)
 5. [new](https://github.com/HuangJunjia/Handwrite-Code/blob/master/NewConstructor/index.html)
 6. [instanceof](https://github.com/HuangJunjia/Handwrite-Code/blob/master/Instanceof/index.html)
 

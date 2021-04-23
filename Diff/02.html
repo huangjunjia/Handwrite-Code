@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<main>
+  <button onclick="updateRender()">更新dom</button>
+  <ul></ul>
+</main>
+<script>
+  // 根元素
+  const container = document.querySelector('ul');
+
+  // 旧节点列表
+  let oldVnodeList = [
+    { key: 0 },
+    { key: 1 },
+    { key: 2 },
+    { key: 3 },
+    { key: 4 },
+    { key: 5 },
+    { key: 6 },
+    { key: 7 },
+    { key: 8 },
+    { key: 9 }
+  ];
+
+  // 新节点列表
+  // 通过注释模拟节点增加和删除
+  let newVnodeList = [
+    { key: 0 },
+    { key: 1 },
+    { key: 2 },
+    { key: 3 },
+    { key: 4 },
+    { key: 5 },
+    { key: 6 },
+    { key: 7 },
+    { key: 8 },
+    { key: 9 },
+    // { key: 10 }
+  ];
+
+  // 简单洗牌算法
+  function shuffle(a) {
+    for (let i = a.length; i; i--) {
+      let j = Math.floor(Math.random() * i);
+      [a[i - 1], a[j]] = [a[j], a[i - 1]];
+    }
+    return a;
+  }
+
+  // 渲染
+  function render(nodeList) {
+    for (let i = 0; i < nodeList.length; i++) {
+      const li = document.createElement('li');
+      li.id = `li${nodeList[i].key}`;
+      li.textContent = `li - ${nodeList[i].key}`;
+      nodeList[i].el = li;
+      container.appendChild(li);
+    }
+  }
+
+  window.onload = function() {
+    render(oldVnodeList);
+  };
+
+  // 对比新旧节点
+  function patch(oldVnode, newVnode) {
+    newVnode.el = oldVnode.el;
+  }
+
+  /**
+   * 使用单调递增的形式实现diff
+   * */
+  // 更新render
+  function updateRender() {
+
+  }
+</script>
+</body>
+</html>
