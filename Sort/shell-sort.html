@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<script>
+  const arr = [123, 315, 123, 1, 51, 5234, 123, 42, 42352, 35, 1, 23, 51, 232, 45, 234, 111];
+
+  function shellSort(arr) {
+    for (let gap = 5; gap > 0; gap = Math.floor(gap / 2)) {
+      for (let i = gap; i < arr.length; i++) {
+        const temp = arr[i];
+        let j = i - gap;
+
+        while (j >= 0 && arr[j] > temp) {
+          arr[j + gap] = arr[j];
+          j -= gap;
+        }
+
+        arr[j + gap] = temp;
+      }
+    }
+  }
+
+  shellSort(arr);
+  console.log(arr);
+</script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<script>
+  const arr = [123, 315, 123, 1, 51, 5234, 123, 42, 42352, 35, 1, 23, 51, 232, 45, 234, 111];
+
+  function mergeSort(arr) {
+    if (arr.length < 2) {
+      return arr;
+    }
+
+    const middle = Math.floor(arr.length / 2);
+    const leftArr = arr.slice(0, middle);
+    const rightArr = arr.slice(middle);
+
+    return merge(mergeSort(leftArr), mergeSort(rightArr));
+  }
+
+  function merge(leftArr, rightArr) {
+    const result = [];
+
+    while (leftArr.length > 0 && rightArr.length > 0) {
+      if (leftArr[0] <= rightArr[0]) {
+        result.push(leftArr.shift());
+      } else {
+        result.push(rightArr.shift());
+      }
+    }
+
+    while (leftArr.length > 0) {
+      result.push(leftArr.shift());
+    }
+
+    while (rightArr.length > 0) {
+      result.push(rightArr.shift());
+    }
+
+    return result;
+  }
+
+  const resArr = mergeSort(arr);
+  console.log(resArr);
+</script>
+</body>
+</html>

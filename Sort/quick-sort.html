@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+<script>
+  const arr = [123, 315, 123, 1, 51, 5234, 123, 42, 42352, 35, 1, 23, 51, 232, 45, 234, 111];
+
+  function quickSort(arr) {
+    if (arr.length < 2) {
+      return arr;
+    }
+
+    const base = arr[0];
+    const leftArr = [];
+    const middleArr = [base];
+    const rightArr = [];
+
+    for (let i = 1; i < arr.length; i++) {
+      if (arr[i] === base) {
+        middleArr.push(arr[i]);
+      } else if (arr[i] < base) {
+        leftArr.push(arr[i]);
+      } else if (arr[i] > base) {
+        rightArr.push(arr[i]);
+      }
+    }
+
+    return quickSort(leftArr).concat(middleArr, quickSort(rightArr));
+  }
+
+  const resArr = quickSort(arr);
+  console.log(resArr);
+</script>
+</body>
+</html>

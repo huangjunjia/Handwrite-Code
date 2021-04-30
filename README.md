@@ -20,6 +20,11 @@
 ## 排序
 
 1. [冒泡排序](https://github.com/HuangJunjia/Handwrite-Code/blob/master/Sort/bubble-sort.html)
+2. [插入排序](https://github.com/HuangJunjia/Handwrite-Code/blob/master/Sort/insertion-sort.html)
+3. [归并排序](https://github.com/HuangJunjia/Handwrite-Code/blob/master/Sort/merge-sort.html)
+4. [快速排序](https://github.com/HuangJunjia/Handwrite-Code/blob/master/Sort/quick-sort.html)
+5. [选择排序](https://github.com/HuangJunjia/Handwrite-Code/blob/master/Sort/selection-sort.html)
+6. [哈希排序](https://github.com/HuangJunjia/Handwrite-Code/blob/master/Sort/shell-sort.html)
 
 ## CSS
 
